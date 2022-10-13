@@ -1,0 +1,33 @@
+{
+  "name": "alerta-alimentos-bot",
+  "version": "1.0.0",
+  "description": " Bot notifcador de alertas de seguridad de alimentos del Ministerio de Consumo ",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/soker90/alerta-alimentos-bot.git"
+  },
+  "keywords": [
+    "telegram",
+    "scrapper"
+  ],
+  "author": "Eduardo Parra",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/soker90/alerta-alimentos-bot/issues"
+  },
+  "homepage": "https://github.com/soker90/alerta-alimentos-bot#readme",
+  "dependencies": {
+    "playwright-chromium": "1.27.1"
+  },
+  "devDependencies": {
+    "standard": "^17.0.0"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/standard/eslintrc.json"
+  }
+}
