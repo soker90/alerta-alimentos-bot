@@ -6,5 +6,5 @@ const CHAT_ID = process.env.CHAT_ID
 
 export const sendToTelegram = async ({ title, url }) => {
   const msg = `${title} https://www.aesan.gob.es${url}`
-  await bot.sendMessage(CHAT_ID, msg, { parse_mode: 'Markdown' })
+  await bot.sendMessage(CHAT_ID, msg)
 }
