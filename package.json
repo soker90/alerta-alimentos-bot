@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/soker90/alerta-alimentos-bot#readme",
   "dependencies": {
+    "node-telegram-bot-api": "0.59.0",
     "playwright-chromium": "1.27.1"
   },
   "devDependencies": {

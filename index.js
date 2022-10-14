@@ -1,10 +1,13 @@
 import { chromium } from 'playwright-chromium'
 import { readFile, writeFile } from './fileUtils.js'
+import { sendToTelegram } from './sendToTelegram.js'
 
 const checkLastNew = async ({ content, index, lastPostUrlSaved }) => {
   const lastPostUrl = await content[index].getAttribute('href')
+  const text = await content[index].innerText()
   if (lastPostUrl !== lastPostUrlSaved.lastNews) {
-    console.log(`Nueva noticia ${lastPostUrl}`)
+    console.log(`Nueva noticia: ${text} - ${lastPostUrl}`)
+    await sendToTelegram({ title: text, url: lastPostUrl })
     return lastPostUrl
   }
   return false
