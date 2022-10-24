@@ -14,7 +14,7 @@ const checkLastNew = async ({ content, index, lastPostUrlSaved }) => {
 
   if (lastPostUrl !== lastPostUrlSaved.lastNews) {
     console.log(`Nueva noticia: ${text} - ${lastPostUrl}`)
-    // await sendToTelegram({ title: text, url: lastPostUrl })
+    await sendToTelegram({ title: text, url: lastPostUrl })
     return lastPostUrl
   }
   return false
