@@ -3,18 +3,18 @@ import { readFile, writeFile } from './fileUtils.js'
 import { sendToTelegram } from './sendToTelegram.js'
 
 const checkLastNew = async ({ content, index, lastPostUrlSaved }) => {
-  let lastPostUrl
+  let l
   try {
-    lastPostUrl = await content[index].getAttribute('href')
+    l = await content[index].getAttribute('href')
   } catch (error) {
     return true
   }
 
   const text = await content[index].innerText()
 
-  if (lastPostUrl !== lastPostUrlSaved.lastNews) {
-    console.log(`Nueva noticia: ${text} - ${lastPostUrl}`)
-    await sendToTelegram({ title: text, url: lastPostUrl })
+  if (l !== lastPostUrlSaved.lastNews) {
+    console.log(`Nueva noticia: ${text} - ${l}`)
+    await sendToTelegram({ title: text, url: l })
     return lastPostUrl
   }
   return false
