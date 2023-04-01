@@ -3,7 +3,7 @@ name: Búsqueda de nuevas noticias
 on:
   workflow_dispatch:
   schedule:
-    - cron: 1 9,12,20 * * *
+    - cron: 1 8,11,19 * * *
 
 env:
   CHAT_ID: ${{ secrets.CHAT_ID }}
