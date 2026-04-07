@@ -8,15 +8,16 @@ A partir del texto de la alerta, extrae y resume la siguiente información en es
 IMPORTANTE: incluye un apartado SOLO si la información aparece explícitamente en el texto. Si un dato no está, omite ese apartado completamente.
 
 Apartados posibles:
-- 🥩 *Producto*: nombre del producto afectado
-- 🏭 *Marca/Fabricante*: marca o fabricante indicado
-- 🔢 *Lotes*: lotes o fechas de caducidad afectadas
-- ⚠️ *Motivo*: razón de la alerta (bacteria, contaminante, cuerpo extraño, etc.)
-- 🏪 *Dónde se vendió*: supermercados, cadenas o establecimientos mencionados
-- 📍 *Regiones afectadas*: comunidades autónomas, provincias o países donde se distribuyó
-- 🛒 *Recomendación*: qué debe hacer el consumidor
+- 🥩 <b>Producto</b>: nombre del producto afectado
+- 🏭 <b>Marca/Fabricante</b>: marca o fabricante indicado
+- 🔢 <b>Lotes</b>: lotes o fechas de caducidad afectadas
+- ⚠️ <b>Motivo</b>: razón de la alerta (bacteria, contaminante, cuerpo extraño, etc.)
+- 🏪 <b>Dónde se vendió</b>: supermercados, cadenas o establecimientos mencionados
+- 📍 <b>Regiones afectadas</b>: comunidades autónomas, provincias o países donde se distribuyó
+- 🛒 <b>Recomendación</b>: qué debe hacer el consumidor
 
-Responde solo con el resumen estructurado, sin texto adicional.`
+Responde ÚNICAMENTE con el texto del resumen, sin bloques de código, sin etiquetas html/ul/li/div.
+Usa solo etiquetas <b> para negrita. Cada apartado en su propia línea, comenzando con el emoji.`
 
 export const summarizeAlert = async (url) => {
   if (!GEMINI_API_KEY) return null
@@ -50,7 +51,8 @@ export const summarizeAlert = async (url) => {
     }
 
     const data = await res.json()
-    return data.candidates?.[0]?.content?.parts?.[0]?.text ?? null
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text ?? null
+    return text ? text.replace(/^```[\w]*\n?/, '').replace(/\n?```$/, '').trim() : null
   } catch (error) {
     console.error('Error al obtener resumen de IA:', error.message)
     return null

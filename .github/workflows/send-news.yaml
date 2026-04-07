@@ -6,7 +6,7 @@ on:
     - cron: 1 8,11,19 * * *
 
 env:
-  CHAT_ID: ${{ secrets.CHAT_ID }}
+  CHAT_ID_BETA: ${{ secrets.CHAT_ID_BETA }}
   TOKEN_TELEGRAM: ${{ secrets.TOKEN_TELEGRAM }}
 
 jobs:
@@ -15,7 +15,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v6
-    - name: Use Node.js version 18.x
+    - name: Use Node.js version 24.x
       uses: actions/setup-node@v6
       with:
         node-version: 24.x
