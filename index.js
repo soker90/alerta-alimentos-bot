@@ -1,4 +1,4 @@
-import { chromium } from 'playwright-chromium'
+import { parse } from 'node-html-parser'
 import { readFile, writeFile } from './fileUtils.js'
 import { sendToTelegram } from './sendToTelegram.js'
 
@@ -7,25 +7,21 @@ import { sendToTelegram } from './sendToTelegram.js'
 const LINK_WITH_BUG = '/AECOSAN/web/seguridad_alimentaria/ampliacion/2023_16.htm'
 
 const checkLastNew = async ({ content, index, lastPostUrlSaved }) => {
-  let lastPostUrl
-  try {
-    lastPostUrl = await content[index].getAttribute('href')
-  } catch (error) {
-    return true
-  }
+  if (!content[index]) return true
 
-  const text = await content[index].innerText()
+  const lastPostUrl = content[index].getAttribute('href')
+  const text = content[index].innerText
 
   if (lastPostUrl !== lastPostUrlSaved.lastNews) {
-    console.log(`Nueva noticia: ${text} - ${lastPostUrl}`)
+    console.log(`Nueva noticia: ${text} - ${lastPostUrl}\n`)
     await sendToTelegram({ title: text, url: lastPostUrl })
     return lastPostUrl
   }
   return false
 }
 
-const purgeBugLink = async (content) => {
-  const bugLink = await content[0].getAttribute('href')
+const purgeBugLink = (content) => {
+  const bugLink = content[0].getAttribute('href')
 
   if (bugLink === LINK_WITH_BUG) {
     content.shift()
@@ -33,13 +29,13 @@ const purgeBugLink = async (content) => {
 }
 
 const URL_ALERTS = 'https://www.aesan.gob.es/AECOSAN/web/seguridad_alimentaria/subseccion/otras_alertas_alimentarias.htm'
-const browser = await chromium.launch({ headless: true })
 
-const page = await browser.newPage()
-await page.goto(URL_ALERTS)
+const res = await fetch(URL_ALERTS)
+const html = await res.text()
+const root = parse(html)
 
-const content = await page.$$('.theContent > p > a')
-await purgeBugLink(content)
+const content = root.querySelectorAll('.theContent > p > a')
+purgeBugLink(content)
 const lastPostUrlSaved = await readFile()
 
 const lastNews = await checkLastNew({ content, index: 0, lastPostUrlSaved })
@@ -54,7 +50,3 @@ if (lastNews) {
 if (lastNews) {
   await writeFile({ lastNews })
 }
-
-await page.close()
-
-await browser.close()

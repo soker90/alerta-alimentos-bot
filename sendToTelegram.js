@@ -5,6 +5,11 @@ const bot = new TelegramBot(TOKEN_TELEGRAM)
 const CHAT_ID = process.env.CHAT_ID
 
 export const sendToTelegram = async ({ title, url }) => {
+  if (!TOKEN_TELEGRAM || !CHAT_ID) {
+    console.error('TOKEN_TELEGRAM o CHAT_ID no están definidos en las variables de entorno.')
+    return
+  }
+  
   const msg = `${title} [https://www.aesan.gob.es${url}](https://www.aesan.gob.es${url})`
   await bot.sendMessage(CHAT_ID, msg, { parse_mode: 'Markdown' })
 }
