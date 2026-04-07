@@ -23,7 +23,7 @@
   "homepage": "https://github.com/soker90/alerta-alimentos-bot#readme",
   "dependencies": {
     "node-html-parser": "7.1.0",
-    "node-telegram-bot-api": "0.59.0"
+    "node-telegram-bot-api": "0.67.0"
   },
   "devDependencies": {
     "standard": "^17.0.0"

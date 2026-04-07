@@ -18,7 +18,7 @@ jobs:
     - name: Use Node.js version 18.x
       uses: actions/setup-node@v6
       with:
-        node-version: 18.x
+        node-version: 24.x
     - run: npm install
     - run: npm start
     - uses: stefanzweifel/git-auto-commit-action@v7
