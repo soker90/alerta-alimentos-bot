@@ -5,7 +5,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node ./index.js"
+    "start": "node ./index.js",
+    "lint": "standard"
+  },
+  "engines": {
+    "node": ">=24"
   },
   "repository": {
     "type": "git",
