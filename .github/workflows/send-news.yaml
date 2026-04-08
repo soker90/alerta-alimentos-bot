@@ -8,6 +8,7 @@ on:
 env:
   CHAT_ID_BETA: ${{ secrets.CHAT_ID_BETA }}
   TOKEN_TELEGRAM: ${{ secrets.TOKEN_TELEGRAM }}
+  GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
 jobs:
   downloadStatus:
