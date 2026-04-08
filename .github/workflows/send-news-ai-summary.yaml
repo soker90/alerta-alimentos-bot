@@ -7,7 +7,7 @@ on:
       - completed
 
 env:
-  CHAT_ID: ${{ secrets.CHAT_ID_BETA }}
+  CHAT_ID_BETA: ${{ secrets.CHAT_ID_BETA }}
   TOKEN_TELEGRAM: ${{ secrets.TOKEN_TELEGRAM }}
 
 jobs:
