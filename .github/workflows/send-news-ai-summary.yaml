@@ -1,0 +1,32 @@
+name: AI Summary - Beta
+
+on:
+  workflow_run:
+    workflows: ["Búsqueda de nuevas noticias"]
+    types:
+      - completed
+
+env:
+  CHAT_ID: ${{ secrets.CHAT_ID_BETA }}
+  TOKEN_TELEGRAM: ${{ secrets.TOKEN_TELEGRAM }}
+
+jobs:
+  send-ai-summary:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        ref: feature/ai-summary
+    - name: Use Node.js version 24.x
+      uses: actions/setup-node@v6
+      with:
+        node-version: 24.x
+    - run: npm install
+    - run: npm start
+    - uses: stefanzweifel/git-auto-commit-action@v7
+      with:
+        commit_message: Add new post
+        file_pattern: 'lastNews.json'
+        branch: feature/ai-summary
