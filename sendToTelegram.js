@@ -16,7 +16,12 @@ export const sendToTelegram = async ({ title, url }) => {
   const fullUrl = new URL(url, 'https://www.aesan.gob.es').href
   const referenceMatch = title.match(/Ref\.\s*(ES\d{4}\/\d+)/i)
   const reference = referenceMatch?.[1] ?? ''
-  const cleanTitle = title.replace(/\s*\(Ref\.\s*ES\d{4}\/\d+\)\s*$/i, '').trim()
+  const cleanTitle = title
+    .replace(/\berror_outline\b/gi, '')
+    .replace(/\s*\(Ref\.\s*ES\d{4}\/\d+\)/i, '')
+    .replace(/\bVer más\b/gi, '')
+    .replace(/\s+/g, ' ')
+    .trim()
 
   const msg = [
     '🚨 *ALERTA ALIMENTARIA — ' + escapeMarkdownV2(reference) + '*',
