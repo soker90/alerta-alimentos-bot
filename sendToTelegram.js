@@ -3,8 +3,11 @@ import TelegramBot from 'node-telegram-bot-api'
 const TOKEN_TELEGRAM = process.env.TOKEN_TELEGRAM
 const CHAT_ID = process.env.CHAT_ID
 
-const escapeMarkdownV2 = (text) => text.replace(/([_\*[\]()~\x60>#+=|{}.!-])/g, '\\$1')
-const escapeMarkdownV2Url = (url) => url.replace(/[)\\]/g, '\\$&')
+const escapeHtml = (text) => text
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
 
 export const sendToTelegram = async ({ title, url }) => {
   if (!TOKEN_TELEGRAM || !CHAT_ID) {
@@ -23,13 +26,18 @@ export const sendToTelegram = async ({ title, url }) => {
     .replace(/\s+/g, ' ')
     .trim()
 
-  const msg = [
-    '🚨 *ALERTA ALIMENTARIA — ' + escapeMarkdownV2(reference) + '*',
-    '',
-    escapeMarkdownV2(cleanTitle),
-    '',
-    '🔗 [Ver alerta completa](' + escapeMarkdownV2Url(fullUrl) + ')'
-  ].join('\n')
+  const dateMatch = cleanTitle.match(/^(\d{1,2}\s+[\p{L}]+\s+\d{4})\s+(.+)$/u)
+  const date = dateMatch?.[1]
+  const alertTitle = dateMatch?.[2] ?? cleanTitle
 
-  await bot.sendMessage(CHAT_ID, msg, { parse_mode: 'MarkdownV2' })
+  const msg = [
+    '🚨 <b>ALERTA ALIMENTARIA — ' + escapeHtml(reference) + '</b>',
+    '',
+    date ? '<i>' + escapeHtml(date) + '</i>' : null,
+    date ? escapeHtml(alertTitle) : escapeHtml(cleanTitle),
+    '',
+    '<a href="' + escapeHtml(fullUrl) + '">🔗 Ver alerta completa</a>'
+  ].filter((line) => line !== null).join('\n')
+
+  await bot.sendMessage(CHAT_ID, msg, { parse_mode: 'HTML' })
 }
