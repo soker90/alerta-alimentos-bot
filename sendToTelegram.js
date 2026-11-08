@@ -3,9 +3,9 @@ import TelegramBot from 'node-telegram-bot-api'
 const TOKEN_TELEGRAM = process.env.TOKEN_TELEGRAM
 const CHAT_ID = process.env.CHAT_ID
 
-// Telegram MarkdownV2 requires escaping every reserved character in plain text.
-const escapeMarkdownV2 = (text) => text.replace(/([_*[]()~`>#+=|{}.!\-])/g, '\\$1')
-const escapeMarkdownV2Url = (url) => url.replace(/([)\\])/g, '\\$1')
+// Telegram MarkdownV2 reserved characters in plain text.
+const escapeMarkdownV2 = (text) => text.replace(/[\\_*[]()~`>#+=|{}.!-]/g, '\\$&')
+const escapeMarkdownV2Url = (url) => url.replace(/[)\\]/g, '\\$&')
 
 export const sendToTelegram = async ({ title, url }) => {
   if (!TOKEN_TELEGRAM || !CHAT_ID) {
