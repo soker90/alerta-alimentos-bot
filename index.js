@@ -18,18 +18,21 @@ const getAlerts = html => {
     })
 }
 
-const checkLastNew = async ({ content, index, lastPostUrlSaved }) => {
-  if (!content[index]) return true
+const getAlertSequence = url => {
+  const match = url.match(/\/alertas\/(\d{4})_(\d+)(?:[/?#]|$)/)
 
-  const { title, url } = content[index]
-
-  if (url !== lastPostUrlSaved.lastNews) {
-    console.log(`Nueva alerta: ${title} - ${url}\n`)
-    await sendToTelegram({ title, url })
-    return url
+  if (!match) {
+    throw new Error(`No se pudo determinar la antigüedad de la alerta: ${url}`)
   }
 
-  return false
+  return {
+    year: Number(match[1]),
+    number: Number(match[2])
+  }
+}
+
+const compareAlertSequences = (first, second) => {
+  return first.year - second.year || first.number - second.number
 }
 
 const res = await fetch(URL_ALERTS)
@@ -46,16 +49,22 @@ if (content.length === 0) {
 }
 
 const lastPostUrlSaved = await readFile()
+const lastSequence = getAlertSequence(lastPostUrlSaved.lastNews)
 
-const lastNews = await checkLastNew({ content, index: 0, lastPostUrlSaved })
+const newAlerts = content
+  .filter(({ url }) => compareAlertSequences(getAlertSequence(url), lastSequence) > 0)
+  .sort((first, second) => {
+    return compareAlertSequences(getAlertSequence(first.url), getAlertSequence(second.url))
+  })
 
-let i = 1
-if (lastNews) {
-  while (await checkLastNew({ content, index: i, lastPostUrlSaved })) {
-    i++
+if (newAlerts.length === 0) {
+  console.log(`No hay alertas nuevas. Última alerta registrada: ${lastPostUrlSaved.lastNews}`)
+} else {
+  for (const alert of newAlerts) {
+    console.log(`Nueva alerta: ${alert.title} - ${alert.url}\n`)
+    await sendToTelegram(alert)
   }
-}
 
-if (lastNews) {
-  await writeFile({ lastNews })
+  const latestAlert = newAlerts[newAlerts.length - 1]
+  await writeFile({ lastNews: latestAlert.url })
 }
