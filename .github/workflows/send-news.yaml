@@ -5,6 +5,10 @@ on:
   schedule:
     - cron: 1 8,11,19 * * *
 
+concurrency:
+  group: aesan-alert-check
+  cancel-in-progress: false
+
 env:
   CHAT_ID: ${{ secrets.CHAT_ID }}
   TOKEN_TELEGRAM: ${{ secrets.TOKEN_TELEGRAM }}
@@ -15,11 +19,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v7
-    - name: Use Node.js version 18.x
+    - name: Use Node.js version 24.x
       uses: actions/setup-node@v7
       with:
         node-version: 24.x
     - run: npm install
+    - run: npm test
     - run: npm start
     - uses: stefanzweifel/git-auto-commit-action@v7
       with:
