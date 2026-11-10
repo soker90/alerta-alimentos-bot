@@ -24,6 +24,7 @@ export const sendToTelegram = async ({ title, url }) => {
     .replace(/\s*\(Ref\.\s*ES\d{4}\/\d+\)/i, '')
     .replace(/\bVer más\b/gi, '')
     .replace(/\s+/g, ' ')
+    .replace(/[.!?]{2,}$/u, (punctuation) => punctuation[0])
     .trim()
 
   const dateMatch = cleanTitle.match(/^(\d{1,2}\s+[\p{L}]+\s+\d{4})\s+(.+)$/u)
