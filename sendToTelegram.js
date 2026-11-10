@@ -11,8 +11,7 @@ const escapeHtml = (text) => text
 
 export const sendToTelegram = async ({ title, url }) => {
   if (!TOKEN_TELEGRAM || !CHAT_ID) {
-    console.error('TOKEN_TELEGRAM o CHAT_ID no están definidos en las variables de entorno.')
-    return
+    throw new Error('TOKEN_TELEGRAM o CHAT_ID no están definidos en las variables de entorno.')
   }
 
   const bot = new TelegramBot(TOKEN_TELEGRAM)
