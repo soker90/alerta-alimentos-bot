@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node ./index.js",
-    "lint": "standard"
+    "lint": "standard",
+    "test": "node --test"
   },
   "engines": {
     "node": ">=24"
